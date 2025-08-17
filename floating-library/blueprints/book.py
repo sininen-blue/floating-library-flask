@@ -1,6 +1,7 @@
 from flask import (
     Blueprint, flash, render_template, request, redirect, url_for, abort
 )
+from ..parsers.parser import parse
 from ..db import get_db
 from datetime import datetime
 
@@ -28,21 +29,20 @@ def create_form():
 
 @bp.route('/create', methods=['POST'])
 def create():
-    error = None
+    error: str = None
 
-    url = request.form.get('book_url')
+    url: str = request.form.get('book_url')
     if not url:
         error = "Url is required"
 
     if error is not None:
         flash(error)
     else:
-        # parse
-        results = None
+        results: dict[str, str | list[str]] = parse(url)
 
         title = results.get('title')
-        author = results.get('title')
-        chapter_count = results.get('title')
+        author = results.get('author')
+        chapter_count = results.get('chapter_count')
         date_added = datetime.today().timestamp()
         date_updated = date_added
         db = get_db()

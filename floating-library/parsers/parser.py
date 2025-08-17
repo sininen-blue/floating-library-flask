@@ -1,6 +1,7 @@
 from requests import Session, Response, get
 from bs4 import BeautifulSoup, Tag
 from dotenv import load_dotenv
+from .qq import QqParser
 import os
 
 load_dotenv()
@@ -84,3 +85,18 @@ class Parser:
             info[key] = chunk.text.strip()
         else:
             info["errors"].append(f"Could not find {key}")
+
+
+def parse(url: str) -> dict[str, str | list[str]]:
+    # look at url
+    # figure out which parser it needs
+    # login if required
+
+    parser: Parser = QqParser()
+    parser.login()
+    try:
+        results: dict[str, str | list[str]] = parser.parse(url)
+    except Exception as e:
+        results["errors"].append(f"Parse error: {e}")
+
+    return results
