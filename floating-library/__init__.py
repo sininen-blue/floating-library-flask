@@ -1,6 +1,7 @@
 import os
 from flask import Flask
 from . import db
+from .blueprints import book
 
 
 def create_app(test_config: dict = None):
@@ -25,5 +26,7 @@ def create_app(test_config: dict = None):
         return "You aren't supposed to be here"
 
     db.init_app(app)
+
+    app.register_blueprint(book.bp)
 
     return app
