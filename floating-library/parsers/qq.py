@@ -9,7 +9,7 @@ class QqParser(Parser):
         login_post: str = 'https://forum.questionablequesting.com/login/login',
         csrf_key: str = '_xfToken',
     ) -> None:
-        super().__init__(login_page, csrf_key)
+        super().__init__(login_page, login_post, csrf_key)
 
     def parse(self, url) -> dict[str, str | list[str]]:
         info: dict[str, str | list[str]] = {}
