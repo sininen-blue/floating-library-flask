@@ -2,6 +2,7 @@ from flask import (
     Blueprint, flash, render_template, request, redirect, url_for, abort
 )
 from floating_library.db import get_db
+from datetime import datetime
 
 bp = Blueprint('book', __name__, url_prefix='/book')
 
@@ -9,12 +10,18 @@ bp = Blueprint('book', __name__, url_prefix='/book')
 @bp.route('/', methods=['GET'])
 def index():
     db = get_db()
-    books = db.execute().fetchall()  # TODO: specifics of fetchall and fetchone
+    books = db.execute(
+        'select * '
+        'from book '
+        'order by date_updated desc '
+    ).fetchall()  # TODO: specifics of fetchall and fetchone
 
     context = {
         "books": books
     }
     return render_template('book/index.html', context)
+
+# show route
 
 
 @bp.route('/create', methods=['GET'])
@@ -30,13 +37,23 @@ def create():
     if not url:
         error = "Url is required"
 
-    # parse
-
     if error is not None:
         flash(error)
     else:
+        # parse
+        results = None
+
+        title = results.get('title')
+        author = results.get('title')
+        chapter_count = results.get('title')
+        date_added = datetime.today().timestamp()
+        date_updated = date_added
         db = get_db()
-        db.execute()  # TODO: here
+        db.execute(
+            'insert into book (url, title, author, chapter_count, date_added, date_updated) '
+            'values (?, ?, ?, ?, ?, ?) ',
+            (url, title, author, chapter_count, date_added, date_updated)
+        )
         db.commit()
         return redirect(url_for('book.index'))
 
@@ -49,6 +66,9 @@ def delete(id):
     if book is None:
         abort(404, f"Bood with id: {id} does not exist")
 
-    db.execute('delete from book where id = ?', (id,))
+    db.execute(
+        'delete from book where id = ?',
+        (id,)
+    )
     db.commit()
     return redirect(url_for('book.index'))

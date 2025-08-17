@@ -38,7 +38,7 @@ def init_db_command():
 
 # NOTE: something about adapters so I can insert dates
 sqlite3.register_converter(
-    "timestamp", lambda time: datetime.fromisoformat(time.decode())
+    "timestamp", lambda time: datetime.fromtimestamp(time.decode())
 )
 
 
