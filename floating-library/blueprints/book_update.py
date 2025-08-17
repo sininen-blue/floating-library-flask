@@ -1,7 +1,7 @@
 from flask import (
     Blueprint, render_template,
 )
-from floating_library.db import get_db
+from ..db import get_db
 
 bp = Blueprint('update', __name__, url_prefix='/update')
 
@@ -17,7 +17,4 @@ def index():
         'order by date_added desc'
     ).fetchall()
 
-    context = {
-        "updates": updates
-    }
-    return render_template('update/index.html', context)
+    return render_template('update/index.html', updates=updates)

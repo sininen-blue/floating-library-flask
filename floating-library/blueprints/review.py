@@ -1,7 +1,7 @@
 from flask import (
     Blueprint, flash, render_template, request
 )
-from floating_library.db import get_db
+from ..db import get_db
 from datetime import datetime
 
 bp = Blueprint('review', __name__, url_prefix='/review')
@@ -35,6 +35,7 @@ def create():
         db = get_db()
         db.execute(
             'insert into review (book_id, rating, body, date_added, date_updated) '
-            'values (?, ?, ?, ?, ?) ',
+            'values (?, ?, ?, ?, ?)',
             (book_id, rating, body, date_added, date_updated)
         )
+        db.commit()

@@ -1,7 +1,7 @@
 import os
 from flask import Flask
 from . import db
-from .blueprints import book
+from .blueprints import book, book_update, review
 
 
 def create_app(test_config: dict = None):
@@ -28,5 +28,7 @@ def create_app(test_config: dict = None):
     db.init_app(app)
 
     app.register_blueprint(book.bp)
+    app.register_blueprint(book_update.bp)
+    app.register_blueprint(review.bp)
 
     return app

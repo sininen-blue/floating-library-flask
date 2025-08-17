@@ -1,7 +1,7 @@
 from flask import (
     Blueprint, flash, render_template, request, redirect, url_for, abort
 )
-from floating_library.db import get_db
+from ..db import get_db
 from datetime import datetime
 
 bp = Blueprint('book', __name__, url_prefix='/book')
@@ -16,10 +16,7 @@ def index():
         'order by date_updated desc '
     ).fetchall()  # TODO: specifics of fetchall and fetchone
 
-    context = {
-        "books": books
-    }
-    return render_template('book/index.html', context)
+    return render_template('book/index.html', books=books)
 
 # show route
 
