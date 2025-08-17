@@ -74,19 +74,6 @@ class Parser:
 
     def parse(self, url: str) -> dict[str, str | list[str]]:
         info: dict[str, str | list[str]] = {}
-
-        # element_list: list[str] = ["title", "author", "chapter_count"]
-        # for element in element_list:
-        #     tag = self.queries.get(f"{element}_tag")
-        #     class_name = self.queries.get(f"{element}_class")
-        #
-        #     chunk: Tag | None = soup.find(tag, class_=class_name)
-        #
-        #     if chunk is not None:
-        #         info[element] = chunk.text
-        #     else:
-        #         info["error"].append(f"Could not find {element}")
-
         return info
 
     def add_to_info(
