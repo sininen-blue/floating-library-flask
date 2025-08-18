@@ -91,7 +91,10 @@ def parse(url: str) -> dict[str, str | list[str]]:
     # figure out which parser it needs
     # login if required
 
-    parser: Parser = QqParser()
+    # TODO: turn paeg parsers into PageParsers class
+    # and use composition instead
+
+    parser: Parser = qq.QqParser()
     parser.login()
     try:
         results: dict[str, str | list[str]] = parser.parse(url)
