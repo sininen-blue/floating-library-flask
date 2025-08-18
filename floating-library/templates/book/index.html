@@ -1,15 +1,11 @@
-<section hx-get="{{ url_for("book.index") }}"
-         hx-swap="outerHTML"
-         hx-trigger="load">
-    {% if books %}
-        <ol>
-            {% for book in books %}
-                <li>
-                    <p>{{ book.title }}</p>
-                </li>
-            {% endfor %}
-        </ol>
-    {% else %}
-        <p>No books in library</p>
-    {% endif %}
-</section>
+{% if books %}
+    <ol>
+        {% for book in books %}
+            <li>
+                <p>{{ book.title }}</p>
+            </li>
+        {% endfor %}
+    </ol>
+{% else %}
+    <p>No books in library</p>
+{% endif %}
