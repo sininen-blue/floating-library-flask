@@ -1,5 +1,5 @@
 import os
-from flask import Flask
+from flask import Flask, render_template
 from . import db
 from .blueprints import book, book_update, review
 
@@ -21,9 +21,9 @@ def create_app(test_config: dict = None):
     except OSError:
         pass
 
-    @app.route('/hello')
+    @app.route('/')
     def hello():
-        return "You aren't supposed to be here"
+        return render_template('base.html')
 
     db.init_app(app)
 
