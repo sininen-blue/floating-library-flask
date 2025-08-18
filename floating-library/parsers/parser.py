@@ -1,7 +1,6 @@
 from requests import Session, Response, get
 from bs4 import BeautifulSoup, Tag
 from dotenv import load_dotenv
-from .qq import QqParser
 import os
 
 load_dotenv()

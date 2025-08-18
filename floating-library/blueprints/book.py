@@ -24,7 +24,7 @@ def index():
 
 @bp.route('/create', methods=['GET'])
 def create_form():
-    return render_template('book/create_form.html')
+    return render_template('book/create.html')
 
 
 @bp.route('/create', methods=['POST'])
