@@ -1,5 +1,4 @@
-from .parser import Parser
-from requests import Session
+from ..parser import Parser
 from bs4 import BeautifulSoup, Tag
 
 

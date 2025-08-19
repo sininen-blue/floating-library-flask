@@ -1,5 +1,5 @@
 from .parser import Parser
-from .qq import QqParser
+from .pageParsers import qq
 
 
 def parse(url: str) -> dict[str, str | list[str]]:
@@ -10,7 +10,7 @@ def parse(url: str) -> dict[str, str | list[str]]:
     # TODO: turn paeg parsers into PageParsers class
     # and use composition instead
 
-    parser: Parser = QqParser()
+    parser: Parser = qq.QqParser()
     results: dict[str, str | list[str]]
     try:
         results = parser.parse(url)
