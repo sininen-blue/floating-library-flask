@@ -15,7 +15,7 @@ def index():
         'select * '
         'from book '
         'order by date_updated desc '
-    ).fetchall()  # TODO: specifics of fetchall and fetchone
+    ).fetchall()
 
     return render_template('book/index.html', books=books)
 
