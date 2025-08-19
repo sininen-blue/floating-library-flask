@@ -1,7 +1,7 @@
 from flask import (
     Blueprint, flash, render_template, request, redirect, url_for, abort
 )
-from ..parsers.parser import parse
+from ..parsers import parse
 from ..db import get_db
 from datetime import datetime
 
