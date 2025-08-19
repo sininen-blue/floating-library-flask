@@ -24,7 +24,7 @@ class QqParser(Parser):
         author_chunk: Tag | None = soup.find(
             "a", class_="username u-concealed"
         )
-        self.add_to_info(info, "title", author_chunk)
+        self.add_to_info(info, "author", author_chunk)
 
         chapter_block_chunk: Tag | None = soup.find(
             "dl", class_="pairs pairs--rows fauxBlockLink"
