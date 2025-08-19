@@ -2,6 +2,7 @@ from requests import Session, Response, get
 from bs4 import BeautifulSoup, Tag
 from dotenv import load_dotenv
 import os
+from requests import Session
 
 load_dotenv()
 
@@ -14,6 +15,7 @@ class Parser:
         csrf_key: str | None = None
     ) -> None:
         self.login_page: str = login_page
+        self.login_post: str = login_post
         self.csrf_key: str = csrf_key
         self.session: Session | None = None
 
@@ -40,34 +42,28 @@ class Parser:
         }
         headers: dict[str, str] = {"User-Agent": "Mozilla/5.0"}
 
-        try:
-            response: Response = session.post(
-                self.login_post,
-                data=payload, headers=headers, timeout=10
-            )
-        except Exception as e:
-            raise Exception(f"Failed to login: {e}")
-        if response.status_code != 200:
-            raise Exception(f"HTTP {response.status_code} error")
+        response: Response = session.post(
+            self.login_post,
+            data=payload, headers=headers, timeout=10
+        )
+        response.raise_for_status()
 
         # TODO: confirm if logged in
         # figure out where it redirects
         # check if it redirects to that site
 
+        print("logged in successfully")
+
         self.session = session
 
     def pull(self, url: str) -> BeautifulSoup:
-        info: dict[str, str | list[str]] = {}
-        info["errors"]: list = []
-
-        try:
+        response: Response
+        if self.session is not None:
+            response: Response = self.session.get(url, timeout=10)
+        else:
             response: Response = get(url, timeout=10)
-        except Exception as e:
-            info["errors"].append(f"Request failed: {e}")
-            return info
-        if response.status_code != 200:
-            info["errors"].append(f"HTTP {response.status_code} error")
-            return info
+
+        response.raise_for_status()
 
         soup: BeautifulSoup = BeautifulSoup(response.text, "html.parser")
         return soup
@@ -84,21 +80,3 @@ class Parser:
             info[key] = chunk.text.strip()
         else:
             info["errors"].append(f"Could not find {key}")
-
-
-def parse(url: str) -> dict[str, str | list[str]]:
-    # look at url
-    # figure out which parser it needs
-    # login if required
-
-    # TODO: turn paeg parsers into PageParsers class
-    # and use composition instead
-
-    parser: Parser = qq.QqParser()
-    parser.login()
-    try:
-        results: dict[str, str | list[str]] = parser.parse(url)
-    except Exception as e:
-        results["errors"].append(f"Parse error: {e}")
-
-    return results

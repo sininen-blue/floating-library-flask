@@ -1,4 +1,5 @@
 from .parser import Parser
+from requests import Session
 from bs4 import BeautifulSoup, Tag
 
 
@@ -14,6 +15,7 @@ class QqParser(Parser):
     def parse(self, url) -> dict[str, str | list[str]]:
         info: dict[str, str | list[str]] = {}
 
+        self.login()
         soup: BeautifulSoup = self.pull(url)
 
         title_chunk: Tag | None = soup.find("h1", class_="p-title-value")
