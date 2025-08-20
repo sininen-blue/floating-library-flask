@@ -1,8 +1,8 @@
 from flask import (
     Blueprint, flash, render_template, request, redirect, url_for, abort
 )
-from ..parsers import parse
-from ..db import get_db
+from floating_library.parsers import parse
+from floating_library.db import get_db
 from datetime import datetime
 
 bp = Blueprint('book', __name__, url_prefix='/book')
