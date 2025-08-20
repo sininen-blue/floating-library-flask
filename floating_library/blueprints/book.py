@@ -3,6 +3,7 @@ from flask import (
 )
 from floating_library.parsers import parse
 from floating_library.db import get_db
+from floating_library.handlers.request_handler import RequestHandler
 from datetime import datetime
 
 bp = Blueprint('book', __name__, url_prefix='/book')
@@ -29,11 +30,10 @@ def create_form():
 
 @bp.route('/create', methods=['POST'])
 def create():
+    r: RequestHandler = RequestHandler(request)
     error: str = None
 
-    url: str = request.form.get('book_url')
-    if not url:
-        error = "Url is required"
+    url: str = r.get('book_url')
 
     if error is not None:
         flash(error)
