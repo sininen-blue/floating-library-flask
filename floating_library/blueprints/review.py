@@ -15,20 +15,14 @@ def create_form():
 
 @bp.route('/create', methods=['POST'])
 def create():
+    r: RequestHandler = RequestHandler(request)
     error = None
 
-    book_id = request.form.get('book_id')
-    rating = request.form.get('rating')
-    body = request.form.get('body')
+    book_id = r.get('book_id')
+    rating = r.get('rating')
+    body = r.get('body')
     date_added = datetime.today().timestamp()
     date_updated = date_added
-
-    if not book_id:
-        error = "Book is required"
-    if not rating:
-        error = "Rating is required"
-    if not body:
-        error = "Review is required"
 
     if error is not None:
         flash(error)
