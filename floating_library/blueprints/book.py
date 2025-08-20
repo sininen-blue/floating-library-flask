@@ -55,6 +55,47 @@ def create():
         return redirect(url_for('book.index'))
 
 
+@bp.route('/<int:id>/update', methods=['PUT'])
+def update(id):
+    db = get_db()
+    error: str = None
+
+    book: int = db.execute(
+        'select id, url, chapter_count from book where id = ?', (id,)
+    ).fetchone()
+
+    if book is None:
+        error = f"Could not find book with id: {id}"
+
+    if error is not None:
+        flash(error)
+    else:
+        results: dict[str, str | list[str]] = parse(book["url"])
+
+        chapter_count: int = int(results.get('chapter_count'))
+
+        if chapter_count > book["chapter_count"]:
+            print("updating")
+            diff: int = chapter_count - book["chapter_count"]
+
+            db.execute(
+                'update book '
+                'set chapter_count = ? '
+                'where id = ?',
+                (chapter_count, book["id"])
+            )
+
+            db.execute(
+                'insert into book_update '
+                '(book_id, added_chapters, date_added) '
+                'values (?, ?, ?)',
+                (book["id"], diff, datetime.today().timestamp())
+            )
+            db.commit()
+
+    return index()
+
+
 @bp.route('/<int:id>/delete', methods=['DELETE'])
 def delete(id):
     db = get_db()
