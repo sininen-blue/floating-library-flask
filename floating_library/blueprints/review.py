@@ -3,6 +3,7 @@ from flask import (
 )
 from ..db import get_db
 from datetime import datetime
+from floating_library.handlers.request_handler import RequestHandler
 
 bp = Blueprint('review', __name__, url_prefix='/review')
 
@@ -37,5 +38,33 @@ def create():
             'insert into review (book_id, rating, body, date_added, date_updated) '
             'values (?, ?, ?, ?, ?)',
             (book_id, rating, body, date_added, date_updated)
+        )
+        db.commit()
+
+
+@bp.route('/<int:id>/update')
+def update():
+    r: RequestHandler = RequestHandler(request)
+    error = None
+
+    review_id: str = r.get('review_id')
+    book_id: str = r.get('book_id')
+    rating: str = r.get('rating')
+    body: str = r.get('body')
+    date_updated: datetime = datetime.today().timestamp()
+
+    if error is not None:
+        flash(error)
+    else:
+        db = get_db()
+        db.execute(
+            'update review '
+            'set '
+            'book_id = ?, '
+            'rating = ?, '
+            'body = ?, '
+            'date_updated = ? '
+            'where id = ?',
+            (book_id, rating, body, date_updated, review_id)
         )
         db.commit()
