@@ -2,7 +2,6 @@ from requests import Session, Response, get
 from bs4 import BeautifulSoup, Tag
 from dotenv import load_dotenv
 import os
-from requests import Session
 
 load_dotenv()
 

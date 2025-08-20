@@ -1,4 +1,4 @@
-from ..parser import Parser
+from floating_library.parsers.parser import Parser
 from bs4 import BeautifulSoup, Tag
 
 
