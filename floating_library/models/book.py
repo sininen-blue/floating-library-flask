@@ -15,10 +15,13 @@ class Book:
         self.date_updated: datetime
 
     def _set_attr(self, name: str, value: Any, cast: Callable) -> None:
-        try:
-            setattr(self, name, cast(value))
-        except ValueError:
-            raise ValueError(f"Invalid {name} value: {value!r}")
+        if value is cast():
+            setattr(self, name, value)
+        else:
+            try:
+                setattr(self, name, cast(value))
+            except ValueError:
+                raise ValueError(f"Invalid {name} value: {value!r}")
 
     def set_id(self, id) -> None:
         if id is not None:
@@ -37,10 +40,18 @@ class Book:
         self._set_attr("chapter_count", chapter_count, int)
 
     def set_date_added(self, date_added) -> None:
-        self._set_attr("date_added", date_added, datetime.fromtimestamp)
+        if type(date_added) is datetime:
+            setattr(self, "date_added", date_added)
+        else:
+            raise ValueError(
+                f"Invalid {date_added} value: needs to be datetime")
 
     def set_date_updated(self, date_updated) -> None:
-        self._set_attr("date_updated", date_updated, datetime.fromtimestamp)
+        if type(date_updated) is datetime:
+            setattr(self, "date_updated", date_updated)
+        else:
+            raise ValueError(
+                f"Invalid {date_updated} value: needs to be datetime")
 
 
 class BookHandler:
@@ -73,7 +84,7 @@ class BookHandler:
 
     def get(self, id: int) -> Book:
         db = get_db()
-        bookRow: int = db.execute(
+        bookRow = db.execute(
             'select * from book where id = ?', (id,)
         ).fetchone()
 
@@ -83,6 +94,9 @@ class BookHandler:
         book: Book = self.make(dict(bookRow))
 
         return book
+
+    def search(self, query: str) -> list[Book]:
+        pass  # TODO:
 
     def save(self, book: Book) -> None:
         db = get_db()

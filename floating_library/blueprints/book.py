@@ -17,7 +17,12 @@ def index():
 
     return render_template('book/index.html', books=books)
 
-# show route
+
+@bp.route('/search', methods=['GET'])
+def show():
+    query = request.args.get("q")
+    books: list[Book] = bh.search(query)
+    return render_template('book/index.html', books=books)
 
 
 @bp.route('/create', methods=['GET'])
