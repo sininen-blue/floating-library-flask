@@ -46,6 +46,8 @@ def create():
 
         return redirect(url_for('book.index'))
 
+# TODO: just make time be a float
+
 
 @bp.route('/<int:id>/update', methods=['PUT'])
 def update(id):
@@ -78,4 +80,4 @@ def update(id):
 @bp.route('/<int:id>/delete', methods=['DELETE'])
 def delete(id):
     bh.delete(id)
-    return redirect(url_for('book.index'))
+    return index()

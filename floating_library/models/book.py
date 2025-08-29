@@ -15,13 +15,10 @@ class Book:
         self.date_updated: datetime
 
     def _set_attr(self, name: str, value: Any, cast: Callable) -> None:
-        if value is cast():
-            setattr(self, name, value)
-        else:
-            try:
-                setattr(self, name, cast(value))
-            except ValueError:
-                raise ValueError(f"Invalid {name} value: {value!r}")
+        try:
+            setattr(self, name, cast(value))
+        except ValueError:
+            raise ValueError(f"Invalid {name} value: {value!r}")
 
     def set_id(self, id) -> None:
         if id is not None:
@@ -40,30 +37,30 @@ class Book:
         self._set_attr("chapter_count", chapter_count, int)
 
     def set_date_added(self, date_added) -> None:
-        if type(date_added) is datetime:
-            setattr(self, "date_added", date_added)
-        else:
-            raise ValueError(
-                f"Invalid {date_added} value: needs to be datetime")
+        self._set_attr("date_added", date_added, datetime.fromtimestamp)
 
     def set_date_updated(self, date_updated) -> None:
-        if type(date_updated) is datetime:
-            setattr(self, "date_updated", date_updated)
-        else:
-            raise ValueError(
-                f"Invalid {date_updated} value: needs to be datetime")
+        self._set_attr("date_updated", date_updated, datetime.fromtimestamp)
 
 
 class BookHandler:
+    # TODO: issue about date_added and date updated
     def make(self, items: dict) -> Book:
         book: Book = Book()
+
+        id = items.get("id")
+        if id is None:
+            book.set_date_added(datetime.today().timestamp())
+            book.set_date_updated(datetime.today().timestamp())
+        else:
+            book.set_date_added(items.get("date_added"))
+            book.set_date_updated(datetime.today().timestamp())
+
         book.set_id(items.get("id"))
         book.set_url(items.get("url"))
         book.set_title(items.get("title"))
         book.set_author(items.get("author"))
         book.set_chapter_count(items.get("chapter_count"))
-        book.set_date_added(items.get("date_added"))
-        book.set_date_added(items.get("date_added"))
 
         return book
 

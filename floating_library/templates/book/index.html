@@ -8,6 +8,7 @@
                 <p>{{ book.date_added }}</p>
                 <!-- TODO: template filters on init -->
                 <button hx-put="{{ url_for('book.update', id=book.id) }}" hx-swap="none">Update</button>
+                <button hx-delete="{{ url_for('book.delete', id=book.id) }}" hx-swap="delete">Delete</button>
             </li>
         {% endfor %}
     </ol>
